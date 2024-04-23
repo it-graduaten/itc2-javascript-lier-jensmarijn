@@ -1,3 +1,4 @@
+import Player from "./models/Player";
 import Question from "./models/Question";
 import QuizApp from "./models/Quiz";
 import { GameMode } from "./types/enum/GameMode";
@@ -64,7 +65,7 @@ window.addEventListener('load', () => {
         updateVisibleItem(divPlayersContainer);
     });
 
-    // implement logic to set the game mode
+  
     // implement logic to set the number of players
 
     document.getElementById("txtNumberQuestions")?.addEventListener("change", (e) => {
@@ -129,6 +130,18 @@ window.addEventListener('load', () => {
         const input = document.getElementById("player-name") as HTMLInputElement;
         const name = input.value.trim();
 
+        if(name === ""){
+            alert("Naam mag niet leeg zijn")
+            return;
+        }
+
+        quizApp.players.forEach(player => {
+            if(name === player.name){
+                alert("verzin een unieke naam")
+                return;
+            }
+        });
+     
         quizApp.addPlayer(name);
         input.value = "";
 
@@ -137,6 +150,7 @@ window.addEventListener('load', () => {
             updateVisibleItem(divQuizContainer);
             quizApp.startQuiz();
         }
+        
     });
 
     // implement logic to submit the answer, update the score and move to the next question
