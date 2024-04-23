@@ -229,6 +229,8 @@ window.addEventListener('load', () => {
     };
 
     const validateQuestionInput = (questionText: string, answers: IAnswer[]): boolean => {
+        console.log("test")
+        console.log(wordCount(questionText))
         // implement validation logic, return true if the input is valid
         // logic: questionText should have at least 5 characters, answers should have at least one correct answer
         return true
@@ -243,6 +245,15 @@ window.addEventListener('load', () => {
 
     const init = () => {
         hideAllElementsExcept(divWelcome);
+    }
+
+    const wordCount = (questionText: string) => {
+        const words = questionText.split(" ");
+
+        console.log(words.length)
+
+        return words.length;
+        
     }
 
     init();
