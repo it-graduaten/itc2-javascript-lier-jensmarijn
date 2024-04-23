@@ -6,6 +6,7 @@ import { IAnswer } from "./types/interfaces/IAnswer";
 
 window.addEventListener('load', () => {
 
+    console.log("loaded window")
     const quizApp = new QuizApp([], [], 0);
     const questionAnswers: IAnswer[] = [];
     const divWelcome = document.getElementById("welcome-container") as HTMLElement;
@@ -94,6 +95,7 @@ window.addEventListener('load', () => {
     document.getElementById("btn-add-question")?.addEventListener("click", () => {
         const q = document.getElementById("txt-question") as HTMLInputElement;
         const btnCloseModal = document.getElementById("btnCloseModal") as HTMLButtonElement;
+        console.log("test1")
         if (!validateQuestionInput(q.value, questionAnswers)) {
             alert("Please fill in the question and provide at least one answer with the correct option.");
             return;
@@ -229,6 +231,11 @@ window.addEventListener('load', () => {
     };
 
     const validateQuestionInput = (questionText: string, answers: IAnswer[]): boolean => {
+        console.log(wordCount(questionText))
+        if(wordCount(questionText) < 5){
+            alert("te kort")
+            return false
+        }
         // implement validation logic, return true if the input is valid
         // logic: questionText should have at least 5 characters, answers should have at least one correct answer
         return true
@@ -243,6 +250,11 @@ window.addEventListener('load', () => {
 
     const init = () => {
         hideAllElementsExcept(divWelcome);
+    }
+
+    function wordCount(questionText: string){
+        const words = questionText.split(" ")
+        return words.length
     }
 
     init();
