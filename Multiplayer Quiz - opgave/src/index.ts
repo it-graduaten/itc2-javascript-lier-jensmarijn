@@ -182,6 +182,7 @@ window.addEventListener('load', () => {
         questionAnswers.forEach(a => {
             const li = document.createElement("li");
             li.textContent = a.text;
+            
             answersList.appendChild(li);
         });
 
