@@ -8,7 +8,7 @@
             "name": "Launch browser against localhost",
             "type": "msedge",
             "request": "launch",
-            "url": "http://localhost:8080/",
+            "url": "http://localhost:8080/static",
             "webRoot": "${workspaceFolder}"
         },
     ]
