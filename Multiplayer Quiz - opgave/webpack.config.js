@@ -15,4 +15,16 @@ module.exports = {
         filename: "script.js",
         path: path.resolve(__dirname, "public", "static", "bundle"),
     },
+
+    devtool: 'source-map',
+    devServer: {
+        static: {
+          directory: path.join(__dirname, 'public', 'static'),
+        },
+        compress: false,
+        port: 8080,
+        devMiddleware: {
+            writeToDisk: true,
+          },
+      },
 }; 
