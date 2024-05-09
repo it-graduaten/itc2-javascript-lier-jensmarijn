@@ -125,9 +125,14 @@ window.addEventListener('load', () => {
         const btnCloseModal = document.getElementById("btnCloseModal") as HTMLButtonElement;
         console.log("test1")
         if (!validateQuestionInput(q.value, questionAnswers)) {
-            alert("Please fill in the question and provide at least one answer with the correct option.");
+            // alert("Please fill in the question and provide at least one answer with the correct option.");
             return;
         }
+
+        // if(questionAnswers.length <2){
+        //     alert("geef minstens 2 antwoorden.")
+        //     return
+        // }
         const question = new Question(q.value);
         questionAnswers.forEach(a => question.addAnswer(a));
         quizApp.addQuestion(question);
@@ -142,6 +147,7 @@ window.addEventListener('load', () => {
 
     document.getElementById("btn-add-answer")?.addEventListener('click', () => {
         const answer = document.getElementById("txt-answer") as HTMLInputElement;
+       
         const chkAnswer = document.getElementById("chk-correct") as HTMLInputElement;
         const a: IAnswer = {
             text: answer.value,
@@ -227,6 +233,7 @@ window.addEventListener('load', () => {
         questionAnswers.forEach(a => {
             const li = document.createElement("li");
             li.textContent = a.text;
+            
             answersList.appendChild(li);
         });
 
@@ -290,14 +297,22 @@ window.addEventListener('load', () => {
     };
 
     const validateQuestionInput = (questionText: string, answers: IAnswer[]): boolean => {
-        console.log(wordCount(questionText))
+        
         if(wordCount(questionText) < 5){
-            alert("te kort")
+            alert("De vraag moet minstens 5 woorden omvatten.")
             return false
+        }
+        if (checkAnswers(answers) == false){
+            alert("Geef minstens 2 antwoorden waarvan 1 correct.")
+            return false
+        }
+
+        else{
+            return true
         }
         // implement validation logic, return true if the input is valid
         // logic: questionText should have at least 5 characters, answers should have at least one correct answer
-        return true
+       
     };
 
     const showCurrentPlayerBlock = () => {
@@ -316,15 +331,22 @@ window.addEventListener('load', () => {
         return words.length
     }
 
-    const showAlert = (message:string) => {
-        const alertElement = document.createElement('div')
-        alertElement.className = 'alert alert-danger'
-        alertElement.innerText = message;
-        document.body.appendChild(alertElement)
 
+    function checkAnswers(answersList: IAnswer[]){
+        if (answersList.length < 2){
+            return false
+        }
+
+        answersList.forEach(a => {
+            if  (a.isCorrect == true){
+                return true
+            }
+
+            return false
+        });
+
+        return true
     }
-
-
 
 
     init();
