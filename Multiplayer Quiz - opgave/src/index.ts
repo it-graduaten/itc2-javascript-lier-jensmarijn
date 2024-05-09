@@ -8,7 +8,7 @@ import { IAnswer } from "./types/interfaces/IAnswer";
 window.addEventListener('load', () => {
 
     console.log("loaded window")
-    const quizApp = new QuizApp([], [], 0);
+    const quizApp = new QuizApp([], [], 0, 0);
     const questionAnswers: IAnswer[] = [];
     const divWelcome = document.getElementById("welcome-container") as HTMLElement;
     const divQuestionsContainer = document.getElementById("question-container") as HTMLElement;
@@ -51,6 +51,7 @@ window.addEventListener('load', () => {
 
     document.getElementById("aScoreboard")?.addEventListener('click', () => {
         updateVisibleItem(divScoreboardContainer);
+        
     });
 
     document.getElementById("btn-start-quiz")?.addEventListener('click', () => {
@@ -68,6 +69,32 @@ window.addEventListener('load', () => {
 
   
     // implement logic to set the number of players
+    document.getElementById('gameMode')?.addEventListener("change", (e) => {
+        const gameModeInput = e.target as HTMLInputElement;
+        const gameMode = gameModeInput.checked ? 'Multiplayer' : 'SinglePlayer'
+        const gameModeText = document.getElementById('txtGameMode');
+        const inpNumberPlayers = document.getElementById('inpNrPlayers');
+        
+        if (gameModeText) {
+            gameModeText.textContent = gameMode;
+        }
+
+        if  (gameMode === 'Multiplayer') {
+            if (inpNumberPlayers){
+                inpNumberPlayers.classList.remove('d-none');
+                const numberOfPlayersInput = document.getElementById('inpNrPlayers') as HTMLInputElement;
+                const numberOfPlayers = parseInt(numberOfPlayersInput.value);
+                quizApp.numberOfPlayers = numberOfPlayers;
+                
+            }
+        }else {
+        
+            if (inpNumberPlayers) {
+                inpNumberPlayers.classList.add('d-none');
+                quizApp.numberOfPlayers = 1;
+        }
+    }
+    });
 
     document.getElementById("txtNumberQuestions")?.addEventListener("change", (e) => {
         const target = e.target as HTMLInputElement;
@@ -134,22 +161,24 @@ window.addEventListener('load', () => {
         chkAnswer.checked = false;
     });
 
+  
+
     document.getElementById("btn-add-player")?.addEventListener("click", () => {
         const input = document.getElementById("player-name") as HTMLInputElement;
         const name = input.value.trim();
 
-        if(name === ""){
-            alert("Naam mag niet leeg zijn")
+        if(name === ''){
+            alert('Naam mag niet leeg zijn')
             return;
         }
 
         quizApp.players.forEach(player => {
             if(name === player.name){
-                alert("verzin een unieke naam")
+                alert('verzin een unieke naam')
                 return;
             }
         });
-     
+        
         quizApp.addPlayer(name);
         input.value = "";
 
@@ -157,12 +186,28 @@ window.addEventListener('load', () => {
             showCurrentPlayerBlock();
             updateVisibleItem(divQuizContainer);
             quizApp.startQuiz();
-        }
+        }else
+                alert("Voeg meer spelers toe")
+            
         
     });
 
     // implement logic to submit the answer, update the score and move to the next question
     // implement logic to restart the game
+    document.getElementById('btn-restart-game')?.addEventListener('click', () => {
+        restartGame();
+        
+    })
+
+    const restartGame = () => {
+        quizApp.questions = [];
+        quizApp.players = [];
+        quizApp.currentPlayerIndex = 0;
+        quizApp.currentQuestionIndex = 0;
+        hideAllElementsExcept(divWelcome);
+    };
+    
+
 
     const updateQuestionList = () => {
         const noQuestions = document.getElementById("no-questions") as HTMLElement;
@@ -286,6 +331,7 @@ window.addEventListener('load', () => {
         return words.length
     }
 
+
     function checkAnswers(answersList: IAnswer[]){
         if (answersList.length < 2){
             return false
@@ -301,6 +347,7 @@ window.addEventListener('load', () => {
 
         return true
     }
+
 
     init();
 
