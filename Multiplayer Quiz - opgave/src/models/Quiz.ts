@@ -8,17 +8,18 @@ class QuizApp {
   questions: Question[] = [];
   currentQuestionIndex: number = 0;
 
-  numberOfPlayers: number = 1;
+  numberOfPlayers: number;
   players: Player[] = [];
   currentPlayerIndex: number;
   questionMode: QuestionMode;
 
-  constructor(questions: Question[], players: Player[], duration: number) {
+  constructor(questions: Question[], players: Player[], duration: number, numberofPlayers: number) {
     this.questions = questions;
     this.players = players;
     this.quizDuration = duration;
     this.questionMode = QuestionMode.Custom;
     this.currentPlayerIndex = 0;
+    this.numberOfPlayers = numberofPlayers; 
   }
 
   setQuestionMode(mode: QuestionMode) {

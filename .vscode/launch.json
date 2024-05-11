@@ -18,7 +18,7 @@
         },
         {
             "name": "Launch browser against localhost",
-            "type": "msedge",
+            "type": "chrome",
             "request": "launch",
             "url": "http://localhost:8080/",
             "webRoot": "${workspaceFolder}"
