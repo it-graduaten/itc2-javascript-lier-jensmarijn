@@ -126,9 +126,16 @@ window.addEventListener('load', () => {
             text: answer.value,
             isCorrect: chkAnswer.checked
         }
+        
+        if(a.text != ""){
+            questionAnswers.push(a);
+            updateAnswersList();
+        }
 
-        questionAnswers.push(a);
-        updateAnswersList();
+        else{
+            alert("Geef een tekstuele waarde in voor het antwoord.")
+        }
+        
 
         answer.value = '';
         chkAnswer.checked = false;
@@ -291,9 +298,14 @@ window.addEventListener('load', () => {
             return false
         }
 
+
         answersList.forEach(a => {
             if  (a.isCorrect == true){
                 return true
+            }
+
+            if (a.text == ""){
+                return false
             }
 
             return false
