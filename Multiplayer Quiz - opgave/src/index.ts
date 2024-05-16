@@ -7,7 +7,6 @@ import { IAnswer } from "./types/interfaces/IAnswer";
 
 window.addEventListener('load', () => {
 
-    console.log("loaded window")
     const quizApp = new QuizApp([], [], 0, 0);
     const questionAnswers: IAnswer[] = [];
     const divWelcome = document.getElementById("welcome-container") as HTMLElement;
@@ -123,7 +122,7 @@ window.addEventListener('load', () => {
     document.getElementById("btn-add-question")?.addEventListener("click", () => {
         const q = document.getElementById("txt-question") as HTMLInputElement;
         const btnCloseModal = document.getElementById("btnCloseModal") as HTMLButtonElement;
-        console.log("test1")
+        
         if (!validateQuestionInput(q.value, questionAnswers)) {
             // alert("Please fill in the question and provide at least one answer with the correct option.");
             return;
@@ -213,6 +212,36 @@ window.addEventListener('load', () => {
         quizApp.currentQuestionIndex = 0;
         hideAllElementsExcept(divWelcome);
     };
+
+    document.getElementById("btn-submit")?.addEventListener('click', () => {
+        // Zoek het geselecteerde antwoord
+        const selectedAnswer = document.querySelector('input[type="radio"]:checked');
+
+        const id = quizApp.currentQuestionIndex;
+        const correctAnswerList = document.getElementById("correct-answer-list") as HTMLElement
+
+        const selectedAnswerValue = (selectedAnswer as HTMLInputElement).value
+
+        const correctAnswer = correctAnswerList.contains(selectedAnswer)
+
+        const correctQuestion = quizApp.testIfAnswerIsCorrect(quizApp.currentQuestionIndex ,selectedAnswerValue)
+        
+        console.log(selectedAnswerValue)
+        console.log(correctQuestion)
+
+        const currentPlayer = quizApp.players[quizApp.currentPlayerIndex]
+        
+        if(correctQuestion == true){
+            currentPlayer.updateScore(1)
+        }
+        
+        console.log(currentPlayer)
+        console.log(currentPlayer.score)
+        console.log(quizApp.currentQuestionIndex)
+
+        quizApp.nextQuestion()
+        
+    });
     
 
 

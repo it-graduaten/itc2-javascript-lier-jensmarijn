@@ -48,7 +48,7 @@ class QuizApp {
   }
 
   testIfAnswerIsCorrect(index: number, answer: string) {
-    const question = this.questions[index];
+    const question = this.questions[index - 1];
     const correctAnswer = question.answers.find(x => x.isCorrect);
     return correctAnswer?.text === answer;
   }
@@ -103,7 +103,7 @@ class QuizApp {
 
 
   private showScoreBoard() {
-    const btnRestart = document.getElementById("btnRestart") as HTMLButtonElement;
+    const btnRestart = document.getElementById("btn-restart-game") as HTMLButtonElement;
     btnRestart.classList.remove("d-none");
     const scoreBoardContainer = document.getElementById("scoreboard-container") as HTMLElement;
     const scoreBoard = document.getElementById("scoreboard") as HTMLElement;
@@ -115,6 +115,10 @@ class QuizApp {
         scoreBoard.appendChild(li);
       });
     }
+
+    btnRestart.addEventListener("click", () => {
+      window.location.href = "index.html"
+    })
   }
 
   private showQuestion(index: number) {
