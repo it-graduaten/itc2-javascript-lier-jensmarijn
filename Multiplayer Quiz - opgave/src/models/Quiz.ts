@@ -2,6 +2,8 @@ import Question from "./Question";
 import Player from "./Player";
 import { GameMode } from "../types/enum/GameMode";
 import { QuestionMode } from "../types/enum/QuestionMode";
+import Swal from "sweetalert2";
+
 
 class QuizApp {
   quizDuration: number = 0;
@@ -43,9 +45,48 @@ class QuizApp {
   }
 
   startQuiz() {
+    this.disableNavigation();
     this.currentQuestionIndex = 0;
     this.nextQuestion();
   }
+
+  disableNavigation() {
+    const navLinks = document.querySelectorAll<HTMLAnchorElement>('#lstNavigation a');
+    navLinks.forEach(link => {
+        //link.classList.add('disabled-link');
+        link.addEventListener('click', this.preventNavigation.bind(this), true);
+
+    });
+  }
+
+  enableNavigation() {
+    const navLinks = document.querySelectorAll<HTMLAnchorElement>('#lstNavigation a');
+    navLinks.forEach(link => {
+        //link.classList.remove('disabled-link');
+        link.removeEventListener('click', this.preventNavigation.bind(this), true);
+    });
+  }
+
+  //.bind(this) zorgt ervoor dat we de showcustomalert kunnen oprozpen zonder een uncaught runtime error te krijgen.
+
+
+  preventNavigation(event: MouseEvent) {
+    event.preventDefault()
+    event.stopPropagation()
+    this.showCustomAlert("Navigatie is uitgeschakeld tijdens de quiz. Probeer na de quiz opnieuw aub.")
+}
+
+showCustomAlert(message: string){
+Swal.fire({
+  text: message,
+  timer: 5000,
+  timerProgressBar: true,
+  showConfirmButton: true,
+  position: 'top',
+  toast: true
+})
+}
+
 
   testIfAnswerIsCorrect(index: number, answer: string) {
     const question = this.questions[index - 1];
@@ -76,11 +117,13 @@ class QuizApp {
   }
 
   private endQuiz() {
+    
     this.hideQuiz();
     this.showScoreBoard();
   }
 
   private hideQuiz() {
+    this.enableNavigation();
     const quizContainer = document.getElementById("quiz-container") as HTMLElement;
     if (quizContainer) {
       quizContainer.classList.add("d-none");
