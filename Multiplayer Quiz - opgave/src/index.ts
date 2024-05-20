@@ -1,6 +1,7 @@
 import Player from "./models/Player";
 import Question from "./models/Question";
 import QuizApp from "./models/Quiz";
+import QuestionService from "./services/QuestionService";
 import { GameMode } from "./types/enum/GameMode";
 import { QuestionMode } from "./types/enum/QuestionMode";
 import { IAnswer } from "./types/interfaces/IAnswer";
@@ -104,7 +105,21 @@ window.addEventListener('load', () => {
     });
 
     // implement logic to set the question mode
+    document.getElementById('questionMode')?.addEventListener("change", (e) => {
+        const questionService = new QuestionService
+        const questionModeInput = e.target as HTMLInputElement;
+        const questionMode = questionModeInput.checked? 'API' : 'Vrije ingave'
+        const questionModeText = document.getElementById('txtQuestionMode');
+        if (questionModeText) {
+            questionModeText.textContent = questionMode;
+        }
     // implement logic to fetch questions from api
+    if (quizApp.questionMode === 'API') {
+        questionService.getQuestions(quizApp.quizDuration * quizApp.numberOfPlayers)
+        .then(data => console.log(data)) 
+        .catch(error => console.error(error)); 
+    }
+});
 
     document.getElementById("btnStart")?.addEventListener("click", () => {
         const navigation = document.getElementById("lstNavigation")
