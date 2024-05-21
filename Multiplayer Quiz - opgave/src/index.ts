@@ -65,15 +65,32 @@ window.addEventListener('load', () => {
 
 
     document.getElementById("btn-next")?.addEventListener('click', () => {
-        updateVisibleItem(divPlayersContainer);
+        if (quizApp.numberOfPlayers < 1) {
+            quizApp.showCustomAlert("geef een aantal spelers in groter dan 1!")
+            alert('test!!!')
+        }
+        else{
+            updateVisibleItem(divPlayersContainer);
+        }
+        
     });
 
   
     // implement logic to set the number of players
+
+    document.getElementById('inpNrPlayers')?.addEventListener("change", (e) => {
+        const inpNumberPlayers = e.target as HTMLInputElement;
+        if (parseInt(inpNumberPlayers.value) < 1){
+            quizApp.showCustomAlert("geef meer dan 2 spelers in!")
+            return;
+        }
+        quizApp.numberOfPlayers = parseInt(inpNumberPlayers.value);
+    })
+
     document.getElementById('gameMode')?.addEventListener("change", (e) => {
         const gameModeInput = e.target as HTMLInputElement;
 
-        const gameMode = gameModeInput.checked ? GameMode.Single : GameMode.Multi;  
+        const gameMode = gameModeInput.checked ? GameMode.Multi : GameMode.Single;  
 
         const gameModeText = document.getElementById('txtGameMode');
         const inpNumberPlayers = document.getElementById('inpNrPlayers');
@@ -88,8 +105,8 @@ window.addEventListener('load', () => {
                 inpNumberPlayers.classList.remove('d-none');
                 const numberOfPlayersInput = document.getElementById('inpNrPlayers') as HTMLInputElement;
                 const numberOfPlayers = parseInt(numberOfPlayersInput.value);
-                quizApp.numberOfPlayers = numberOfPlayers;
                 
+                console.log(numberOfPlayers)
             }
         }else {
         
@@ -107,7 +124,7 @@ window.addEventListener('load', () => {
     document.getElementById("txtNumberQuestions")?.addEventListener("change", (e) => {
         const target = e.target as HTMLInputElement;
         const number = parseInt(target.value);
-        quizApp.quizDuration = number;
+        quizApp.quizDuration = number * quizApp.numberOfPlayers;
         const btn = document.getElementById("btnStart") as HTMLButtonElement;
         btn.disabled = number <= 0;
     });
@@ -129,6 +146,12 @@ window.addEventListener('load', () => {
  
 
     document.getElementById("btnStart")?.addEventListener("click", () => {
+        if(quizApp.numberOfPlayers <=1){
+            quizApp.showCustomAlert("geef een aantal spelers in groter dan 1!")
+            return
+        }
+        quizApp.quizDuration = quizApp.numberOfPlayers
+        console.log(quizApp.quizDuration)
         const navigation = document.getElementById("lstNavigation")
         navigation?.classList.remove('d-none')
         if (quizApp.questionMode === QuestionMode.Custom) {
@@ -198,6 +221,8 @@ window.addEventListener('load', () => {
     document.getElementById("btn-add-player")?.addEventListener("click", () => {
         const input = document.getElementById("player-name") as HTMLInputElement;
         const name = input.value.trim();
+        let addedPlayers = quizApp.players.length;
+        console.log(addedPlayers)
 
         if(name === ''){
             alert('Naam mag niet leeg zijn')
@@ -211,10 +236,11 @@ window.addEventListener('load', () => {
     }
         
         quizApp.addPlayer(name);
+        addedPlayers ++;
     
         input.value = "";
 
-        if (quizApp.players.length === quizApp.numberOfPlayers) {
+        if (addedPlayers === quizApp.numberOfPlayers) {
             showCurrentPlayerBlock();
             updateVisibleItem(divQuizContainer);
             quizApp.startQuiz();
@@ -252,8 +278,7 @@ window.addEventListener('load', () => {
 
         const correctQuestion = quizApp.testIfAnswerIsCorrect(quizApp.currentQuestionIndex ,selectedAnswerValue)
         
-        console.log(selectedAnswerValue)
-        console.log(correctQuestion)
+        
 
         const currentPlayer = quizApp.players[quizApp.currentPlayerIndex]
         
