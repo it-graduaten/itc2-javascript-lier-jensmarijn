@@ -72,9 +72,12 @@ window.addEventListener('load', () => {
     // implement logic to set the number of players
     document.getElementById('gameMode')?.addEventListener("change", (e) => {
         const gameModeInput = e.target as HTMLInputElement;
-        const gameMode = gameModeInput.checked ? 'Multiplayer' : 'Single Player'
+
+        const gameMode = gameModeInput.checked ? GameMode.Single : GameMode.Multi;  
+
         const gameModeText = document.getElementById('txtGameMode');
         const inpNumberPlayers = document.getElementById('inpNrPlayers');
+
         
         if (gameModeText) {
             gameModeText.textContent = gameMode;
@@ -95,7 +98,11 @@ window.addEventListener('load', () => {
                 quizApp.numberOfPlayers = 1;
         }
     }
+
+    console.log(quizApp.players); 
     });
+
+     
 
     document.getElementById("txtNumberQuestions")?.addEventListener("change", (e) => {
         const target = e.target as HTMLInputElement;
@@ -107,20 +114,19 @@ window.addEventListener('load', () => {
 
     // implement logic to set the question mode
     document.getElementById('questionMode')?.addEventListener("change", (e) => {
-        const questionService = new QuestionService
-        const questionModeInput = e.target as HTMLInputElement;
-        const questionMode = questionModeInput.checked? 'API' : 'Vrije ingave'
-        const questionModeText = document.getElementById('txtQuestionMode');
-        if (questionModeText) {
-            questionModeText.textContent = questionMode;
-        }
+        const questionText = document.getElementById("txtQuestionMode") as HTMLElement;
+        const target = e.target as HTMLInputElement;
+       if (!target.checked) {
+       quizApp.questionMode =(QuestionMode.Custom)
+       questionText.innerText = QuestionMode.Custom;
+       }else{
+        quizApp.questionMode =(QuestionMode.Api)
+        questionText.innerText = QuestionMode.Api;
+       }
+    });
+
     // implement logic to fetch questions from api
-    if (quizApp.questionMode === 'API') {
-        questionService.getQuestions(quizApp.quizDuration * quizApp.numberOfPlayers)
-        .then(data => console.log(data)) 
-        .catch(error => console.error(error)); 
-    }
-});
+ 
 
     document.getElementById("btnStart")?.addEventListener("click", () => {
         const navigation = document.getElementById("lstNavigation")
@@ -198,14 +204,14 @@ window.addEventListener('load', () => {
             return;
         }
 
-        quizApp.players.forEach(player => {
-            if(name === player.name){
-                alert('verzin een unieke naam')
-                return;
-            }
-        });
+        const existingPlayers = quizApp.players.find(player => player.name === name);
+    if (existingPlayers) {
+        alert('Kies een unieke naam')
+        return;
+    }
         
         quizApp.addPlayer(name);
+    
         input.value = "";
 
         if (quizApp.players.length === quizApp.numberOfPlayers) {
@@ -213,7 +219,7 @@ window.addEventListener('load', () => {
             updateVisibleItem(divQuizContainer);
             quizApp.startQuiz();
         }else
-                alert("Voeg meer spelers toe")
+                alert(`voeg nog ${quizApp.numberOfPlayers - quizApp.players.length} spelers toe`);
             
         
     });
