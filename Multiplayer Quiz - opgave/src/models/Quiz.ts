@@ -113,6 +113,8 @@ Swal.fire({
       const li = document.createElement("li");
       li.textContent = `${player.name} ${player.isCurrent ? "(Current)" : ""}`;
       playersList.appendChild(li);
+      this.numberOfPlayers + 1;
+      console.log(this.numberOfPlayers)
     });
   }
 
