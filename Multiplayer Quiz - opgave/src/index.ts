@@ -8,7 +8,7 @@ import { IAnswer } from "./types/interfaces/IAnswer";
 
 window.addEventListener('load', () => {
 
-    const quizApp = new QuizApp([], [], 0, 0);
+    const quizApp = new QuizApp([], [], 0, 1);
     const questionAnswers: IAnswer[] = [];
     const divWelcome = document.getElementById("welcome-container") as HTMLElement;
     const divQuestionsContainer = document.getElementById("question-container") as HTMLElement;
@@ -17,6 +17,7 @@ window.addEventListener('load', () => {
     const divScoreboardContainer = document.getElementById("scoreboard-container") as HTMLElement;
     const divQuestionApiContainer = document.getElementById("question-api-container") as HTMLElement;
     const divCurrentPlayer = document.getElementById("current-player-container") as HTMLElement;
+    
 
 
     //navigatie
@@ -71,7 +72,7 @@ window.addEventListener('load', () => {
     // implement logic to set the number of players
     document.getElementById('gameMode')?.addEventListener("change", (e) => {
         const gameModeInput = e.target as HTMLInputElement;
-        const gameMode = gameModeInput.checked ? 'Multiplayer' : 'SinglePlayer'
+        const gameMode = gameModeInput.checked ? 'Multiplayer' : 'Single Player'
         const gameModeText = document.getElementById('txtGameMode');
         const inpNumberPlayers = document.getElementById('inpNrPlayers');
         
@@ -127,8 +128,12 @@ window.addEventListener('load', () => {
         if (quizApp.questionMode === QuestionMode.Custom) {
             updateVisibleItem(divQuestionsContainer);
             const noQuestionText = document.getElementById("no-questions") as HTMLElement;
-            noQuestionText.innerText = `No questions have been added yet. Add ${quizApp.quizDuration * quizApp.numberOfPlayers} questions to start.`;
-        } else {
+            let amountOfQuestions = (quizApp.quizDuration * quizApp.numberOfPlayers);
+            noQuestionText.innerText = `No questions have been added yet. Add ${amountOfQuestions} questions to start.`;
+        }
+        
+        
+        else {
             updateVisibleItem(divQuestionApiContainer);
         }
 
