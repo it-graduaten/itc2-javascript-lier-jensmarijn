@@ -376,9 +376,12 @@ window.addEventListener('load', () => {
         const currentPlayerName = document.getElementById("current-player-name") as HTMLElement;
         currentPlayerName.innerText = quizApp.players[quizApp.currentPlayerIndex]?.name ?? '';
     }
+    
 
     const init = () => {
         hideAllElementsExcept(divWelcome);
+        //fillDificulty(); //dif meegeven bij opstart
+        //fillCategories(); //cat meegeven bij opstart
     }
 
     function wordCount(questionText: string){
@@ -409,6 +412,7 @@ window.addEventListener('load', () => {
     }
 
 
-    init();
+
+   init();
 
 });
