@@ -73,7 +73,7 @@ window.addEventListener('load', () => {
     document.getElementById('gameMode')?.addEventListener("change", (e) => {
         const gameModeInput = e.target as HTMLInputElement;
 
-        const gameMode = gameModeInput.checked ? GameMode.Single : GameMode.Multi;  
+        const gameMode = gameModeInput.checked ? GameMode.Multi : GameMode.Single; 
 
         const gameModeText = document.getElementById('txtGameMode');
         const inpNumberPlayers = document.getElementById('inpNrPlayers');
@@ -98,8 +98,6 @@ window.addEventListener('load', () => {
                 quizApp.numberOfPlayers = 1;
         }
     }
-
-    console.log(quizApp.players); 
     });
 
      
@@ -383,16 +381,10 @@ window.addEventListener('load', () => {
         const currentPlayerName = document.getElementById("current-player-name") as HTMLElement;
         currentPlayerName.innerText = quizApp.players[quizApp.currentPlayerIndex]?.name ?? '';
     }
-
-    const init = () => {
-        hideAllElementsExcept(divWelcome);
-    }
-
     function wordCount(questionText: string){
         const words = questionText.split(" ")
         return words.length
     }
-
 
     function checkAnswers(answersList: IAnswer[]){
         if (answersList.length < 2){
@@ -415,7 +407,16 @@ window.addEventListener('load', () => {
         return true
     }
 
+    const getCategories = () => {
+       const catagories = document.createElement('li')
+    
+
+    const init = () => {
+        hideAllElementsExcept(divWelcome);
+        getCategories();
+    }
+
 
     init();
 
-});
+}});
