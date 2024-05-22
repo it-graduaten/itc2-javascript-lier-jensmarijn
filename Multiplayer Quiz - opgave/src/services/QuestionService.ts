@@ -16,8 +16,15 @@ getQuestions(aantal: number) {
            .then(data => resolve(data))
            .catch(error => reject(error));
     });
-
-   
 }
+
+    getCategories() {
+        return new Promise((resolve, reject) => {
+            fetch(this.categoryUrl)
+               .then(response => response.json())
+               .then(data => resolve(data))
+               .catch(error => reject(error));
+        })
+    };
 }
 export default QuestionService
