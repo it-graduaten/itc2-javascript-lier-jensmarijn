@@ -5,6 +5,8 @@ import QuestionService from "./services/QuestionService";
 import { GameMode } from "./types/enum/GameMode";
 import { QuestionMode } from "./types/enum/QuestionMode";
 import { IAnswer } from "./types/interfaces/IAnswer";
+import { ICategory } from "./types/interfaces/ICategory";
+import { Difficulty } from "./types/enum/Difficulty";
 
 window.addEventListener('load', () => {
 
@@ -17,6 +19,7 @@ window.addEventListener('load', () => {
     const divScoreboardContainer = document.getElementById("scoreboard-container") as HTMLElement;
     const divQuestionApiContainer = document.getElementById("question-api-container") as HTMLElement;
     const divCurrentPlayer = document.getElementById("current-player-container") as HTMLElement;
+    const questionService = new QuestionService();
     
 
 
@@ -143,6 +146,7 @@ window.addEventListener('load', () => {
     });
 
     // implement logic to fetch questions from api
+
  
 
     document.getElementById("btnStart")?.addEventListener("click", () => {
@@ -434,16 +438,65 @@ window.addEventListener('load', () => {
         return true
     }
 
-    const getCategories = () => {
-       const catagories = document.createElement('li')
-    
+ /*const getCategories = async () =>{
+    try{
+        const categories =  questionService.getCategories()
+        const ulList = document.createElement('ul')
+
+        categories.forEach((category: ICategory) => {
+            const liElement = document.createElement('li');
+            liElement.textContent = category.name;
+            ulList.appendChild(liElement);
+        });
+
+        document.body.appendChild(ulList);
+    } catch (error) {
+        console.error(error);
+    }
+};*/
+
+const getDifficulty = () => {
+    const difficultyList: string[] = [];
+
+    for (const difficulty in Difficulty) {
+        const value = Difficulty[difficulty as keyof typeof Difficulty];
+
+        if (typeof value === "string") {
+            difficultyList.push(value);
+        }
+    }
+
+    return difficultyList;
+
+};
+
+
+   const getCategories = async () => {
+        try{
+            const categories =  questionService.getCategories()
+            console.log(categories)
+        }catch (error) {
+            console.error(error);
+        }
+    }
+
+    const getQuestions = async () => {
+        try{
+            const questions =  questionService.getQuestions(2, "easy", {id:16, name:"Art"})
+            console.log(questions)
+        }catch (error){
+            console.error(error);
+        }
+    }
 
     const init = () => {
         hideAllElementsExcept(divWelcome);
+        getDifficulty();
         getCategories();
-    }
+        getQuestions();
+    };
 
 
     init();
 
-}});
+});
