@@ -26,3 +26,6 @@ button:hover {
     cursor: not-allowed;
     opacity: 0.5;
 }
+.d-none{
+    display: none;
+}
