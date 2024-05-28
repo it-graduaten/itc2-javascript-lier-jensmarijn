@@ -496,7 +496,7 @@ const getDifficulty = () => {
         hideAllElementsExcept(divWelcome);
         
         getQuestions();
-        console.log(showCatagories());
+        showCatagories();
         showDifficulties();
     };
 
