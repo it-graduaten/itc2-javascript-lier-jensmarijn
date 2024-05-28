@@ -406,6 +406,33 @@ window.addEventListener('load', () => {
        
     };
 
+    const showDifficulties = () => {
+        const difficultySelect = document.getElementById("difficultySelect") as HTMLSelectElement;
+        const difficulties = getDifficulty()
+        difficulties.forEach((difficulty) =>{
+            const option = document.createElement("option")
+            option.value = difficulty
+            option.innerText = difficulty
+            difficultySelect.appendChild(option)
+        })
+    };
+
+
+    const showCatagories = () => {
+        const categorySelect = document.getElementById("categorySelect") as HTMLSelectElement;
+    
+       questionService.getCategories().then(categories =>{
+        categories.forEach((category: ICategory) =>{
+            const option = document.createElement("option")
+            option.value = category.id.toString()
+            option.innerText = category.name
+            categorySelect.appendChild(option)
+        })
+    }).catch(error => {
+            console.log(error)
+        })
+       }
+
     const showCurrentPlayerBlock = () => {
         const currentPlayer = document.getElementById("current-player-container") as HTMLElement;
         currentPlayer.classList.remove("d-none");
@@ -438,22 +465,7 @@ window.addEventListener('load', () => {
         return true
     }
 
- /*const getCategories = async () =>{
-    try{
-        const categories =  questionService.getCategories()
-        const ulList = document.createElement('ul')
 
-        categories.forEach((category: ICategory) => {
-            const liElement = document.createElement('li');
-            liElement.textContent = category.name;
-            ulList.appendChild(liElement);
-        });
-
-        document.body.appendChild(ulList);
-    } catch (error) {
-        console.error(error);
-    }
-};*/
 
 const getDifficulty = () => {
     const difficultyList: string[] = [];
@@ -471,15 +483,6 @@ const getDifficulty = () => {
 };
 
 
-   const getCategories = async () => {
-        try{
-            const categories =  questionService.getCategories()
-            console.log(categories)
-        }catch (error) {
-            console.error(error);
-        }
-    }
-
     const getQuestions = async () => {
         try{
             const questions =  questionService.getQuestions(2, "easy", {id:16, name:"Art"})
@@ -491,9 +494,10 @@ const getDifficulty = () => {
 
     const init = () => {
         hideAllElementsExcept(divWelcome);
-        getDifficulty();
-        getCategories();
+        
         getQuestions();
+        console.log(showCatagories());
+        showDifficulties();
     };
 
 
