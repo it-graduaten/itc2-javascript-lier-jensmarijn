@@ -99,7 +99,6 @@ window.addEventListener('load', () => {
 
         const gameModeText = document.getElementById('txtGameMode');
         const inpNumberPlayers = document.getElementById('inpNrPlayers');
-        const apiCont = document.getElementById('api-container') as HTMLElement;
 
         
         if (gameModeText) {
@@ -107,7 +106,7 @@ window.addEventListener('load', () => {
         }
 
         if  (gameMode === 'Multiplayer') {
-            apiCont.classList.remove('d-none');
+            
             if (inpNumberPlayers){
                 inpNumberPlayers.classList.remove('d-none');
                 
@@ -117,7 +116,6 @@ window.addEventListener('load', () => {
                 
             }
         }else {
-            apiCont.classList.add('d-none');
             if (inpNumberPlayers) {
                 inpNumberPlayers.classList.add('d-none');
                 
@@ -140,13 +138,17 @@ window.addEventListener('load', () => {
     // implement logic to set the question mode
     document.getElementById('questionMode')?.addEventListener("change", (e) => {
         const questionText = document.getElementById("txtQuestionMode") as HTMLElement;
+        const apiCont = document.getElementById('api-container') as HTMLElement;
+
         const target = e.target as HTMLInputElement;
        if (!target.checked) {
        quizApp.questionMode =(QuestionMode.Custom)
        questionText.innerText = QuestionMode.Custom;
+       apiCont.classList.add('d-none')
        }else{
         quizApp.questionMode =(QuestionMode.Api)
         questionText.innerText = QuestionMode.Api;
+        apiCont.classList.remove('d-none')
        }
     });
 
