@@ -102,16 +102,19 @@ Swal.fire({
     } else {
       
       this.showQuestion(this.currentQuestionIndex);
+      
       this.currentQuestionIndex++;
       if(this.currentPlayerIndex === this.players.length-1){
         this.currentPlayerIndex = 0
       }
-      else if(this.currentQuestionIndex == 0){
-        this.currentPlayerIndex = 0
-      }
+      // else if(this.currentQuestionIndex == 0){
+      //   this.currentPlayerIndex = 0
+      // }
       else{
         this.currentPlayerIndex++;
       }
+
+      this.showCurrentPlayer();
     }
     console.log(this.currentPlayerIndex)
     

@@ -286,7 +286,7 @@ window.addEventListener('load', () => {
        
         if(correctQuestion === true){
             
-            console.log(quizApp.currentPlayerIndex)
+            
             currentPlayer.updateScore(1)
         }
         
