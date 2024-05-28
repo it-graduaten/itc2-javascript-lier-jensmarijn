@@ -95,13 +95,26 @@ Swal.fire({
   }
 
   nextQuestion() {
+    console.log(this.currentPlayerIndex)
+    console.log(this.currentQuestionIndex)
     if (this.currentQuestionIndex === this.questions.length) {
       this.endQuiz();
     } else {
       
       this.showQuestion(this.currentQuestionIndex);
       this.currentQuestionIndex++;
+      if(this.currentPlayerIndex === this.players.length-1){
+        this.currentPlayerIndex = 0
+      }
+      else if(this.currentQuestionIndex == 0){
+        this.currentPlayerIndex = 0
+      }
+      else{
+        this.currentPlayerIndex++;
+      }
     }
+    console.log(this.currentPlayerIndex)
+    
   }
 
   updatePlayerList(elementId: string = "player-list") {
@@ -138,7 +151,7 @@ Swal.fire({
     const currentPlayerName = document.getElementById("current-player-name") as HTMLElement;
 
     if (currentPlayerContainer && currentPlayerName) {
-      currentPlayerName.textContent = this.players[this.currentPlayerIndex]?.name;
+      currentPlayerName.textContent = this.players[this.currentPlayerIndex].name
       currentPlayerContainer.classList.remove("d-none");
     }
   }

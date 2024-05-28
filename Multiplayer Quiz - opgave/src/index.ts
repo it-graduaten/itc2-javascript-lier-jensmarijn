@@ -111,7 +111,7 @@ window.addEventListener('load', () => {
                 const numberOfPlayersInput = document.getElementById('inpNrPlayers') as HTMLInputElement;
                 const numberOfPlayers = parseInt(numberOfPlayersInput.value);
                 
-                console.log(numberOfPlayers)
+                
             }
         }else {
         
@@ -128,6 +128,7 @@ window.addEventListener('load', () => {
         const target = e.target as HTMLInputElement;
         const number = parseInt(target.value);
         quizApp.quizDuration = number * quizApp.numberOfPlayers;
+        console.log(quizApp.quizDuration)
         const btn = document.getElementById("btnStart") as HTMLButtonElement;
         btn.disabled = number <= 0;
     });
@@ -154,7 +155,7 @@ window.addEventListener('load', () => {
             quizApp.showCustomAlert("geef een aantal spelers in groter dan 1!")
             return
         }
-        quizApp.quizDuration = quizApp.numberOfPlayers
+        //quizApp.quizDuration = quizApp.numberOfPlayers
         console.log(quizApp.quizDuration)
         const navigation = document.getElementById("lstNavigation")
         navigation?.classList.remove('d-none')
@@ -226,7 +227,7 @@ window.addEventListener('load', () => {
         const input = document.getElementById("player-name") as HTMLInputElement;
         const name = input.value.trim();
         let addedPlayers = quizApp.players.length;
-        console.log(addedPlayers)
+        
 
         if(name === ''){
             alert('Naam mag niet leeg zijn')
@@ -248,8 +249,7 @@ window.addEventListener('load', () => {
             showCurrentPlayerBlock();
             updateVisibleItem(divQuizContainer);
             quizApp.startQuiz();
-        }else
-                alert(`voeg nog ${quizApp.numberOfPlayers - quizApp.players.length} spelers toe`);
+        }
             
         
     });
@@ -281,18 +281,15 @@ window.addEventListener('load', () => {
         const correctAnswer = correctAnswerList.contains(selectedAnswer)
 
         const correctQuestion = quizApp.testIfAnswerIsCorrect(quizApp.currentQuestionIndex ,selectedAnswerValue)
-        
-        
-
         const currentPlayer = quizApp.players[quizApp.currentPlayerIndex]
         
-        if(correctQuestion == true){
+       
+        if(correctQuestion === true){
+            
+            console.log(quizApp.currentPlayerIndex)
             currentPlayer.updateScore(1)
         }
         
-        console.log(currentPlayer)
-        console.log(currentPlayer.score)
-        console.log(quizApp.currentQuestionIndex)
 
         quizApp.nextQuestion()
         
@@ -410,7 +407,7 @@ window.addEventListener('load', () => {
         const currentPlayer = document.getElementById("current-player-container") as HTMLElement;
         currentPlayer.classList.remove("d-none");
         const currentPlayerName = document.getElementById("current-player-name") as HTMLElement;
-        currentPlayerName.innerText = quizApp.players[quizApp.currentPlayerIndex]?.name ?? '';
+        currentPlayerName.innerText = quizApp.players[quizApp.currentPlayerIndex].name ?? '';
     }
     function wordCount(questionText: string){
         const words = questionText.split(" ")
