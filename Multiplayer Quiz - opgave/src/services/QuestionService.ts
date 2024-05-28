@@ -16,7 +16,7 @@ getQuestions = async(aantal:number, difficulty: string, categorie: ICategory) =>
         const response = await fetch(`${this.baseUrl}${aantal}&type=multiple&difficulty=${difficulty}&category=${categorie.id}`);
 
         if (!response.ok){
-            throw new Error("Api kan niet worden ophehaald");
+            throw new Error("Api kan niet worden opgehaald");
         }
 
         const data = await response.json();
@@ -27,22 +27,7 @@ getQuestions = async(aantal:number, difficulty: string, categorie: ICategory) =>
 }
 }
 
-   
-/*getCategories() {
-    fetch('https://opentdb.com/api_category.php')
-        .then(response => {
-            if (!response.ok){
-                throw new Error("Api kan niet worden ophehaald");
-            }
-            return response.json();
-        })
-        .then(data => console.log(data))
-        .catch((error: Error) => {
-             console.error(error);
-         });
-}*/
-
-getCategories = async() => {
+getCategories = async(): Promise<ICategory[]> => {
     try {
         const response = await fetch(this.categoryUrl)
 
@@ -51,10 +36,11 @@ getCategories = async() => {
         }
 
         const data = await response.json();
-        const categories = data.trivia_categories.map((c: ICategory) => c.name);
+        const categories: ICategory[] = data.trivia_categories.map((c: ICategory) => c.name);
         return categories;
     } catch (error) {
         console.error(error);
+        return [];
 
 }
 }
