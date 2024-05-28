@@ -422,17 +422,22 @@ window.addEventListener('load', () => {
     const showCatagories = () => {
         const categorySelect = document.getElementById("categorySelect") as HTMLSelectElement;
     
-       questionService.getCategories().then(categories =>{
+
+       questionService.getCategories()
+       .then(categories =>{
+
         categories.forEach((category: ICategory) =>{
             const option = document.createElement("option")
             option.value = category.id.toString()
             option.innerText = category.name
             categorySelect.appendChild(option)
         })
-    }).catch(error => {
-            console.log(error)
-        })
-       }
+
+            }).catch(error => {
+                console.log(error)
+            })
+    };
+
 
     const showCurrentPlayerBlock = () => {
         const currentPlayer = document.getElementById("current-player-container") as HTMLElement;
