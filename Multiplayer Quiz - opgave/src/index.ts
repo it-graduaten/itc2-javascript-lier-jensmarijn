@@ -7,6 +7,7 @@ import { QuestionMode } from "./types/enum/QuestionMode";
 import { IAnswer } from "./types/interfaces/IAnswer";
 import { ICategory } from "./types/interfaces/ICategory";
 import { Difficulty } from "./types/enum/Difficulty";
+import { IAPIQuestion } from "./types/interfaces/IAPIQuestion";
 
 window.addEventListener('load', () => {
 
@@ -168,15 +169,35 @@ window.addEventListener('load', () => {
 
     // implement logic to fetch questions from api
     document.getElementById("start-api")?.addEventListener("click", () => {
+        
         const aantal = quizApp.quizDuration
         const difficulty = (document.getElementById("difficultySelect") as HTMLSelectElement).value
         
-        console.log(difficulty)
+        
         
       if (selectedCategoryId != null){
         try {
-            const questions = questionService.getQuestions(aantal, difficulty,selectedCategoryId)
-            console.log(questions)
+            questionService.getQuestions(aantal, difficulty,selectedCategoryId).then((q : IAPIQuestion[]) =>{
+                q.forEach(e => {
+                     const apiQuestion = new Question(e.question)
+                     const answers = e.incorrect_answers.map((ia) => apiQuestion.addAnswer(
+                        {
+                            isCorrect:false,
+                            text: ia,
+                        }
+                     ))
+                     apiQuestion.addAnswer({
+                        isCorrect:true,
+                        text:e.correct_answer,
+                     })
+                     quizApp.addQuestion(apiQuestion)
+                        
+            });
+            console.log(quizApp.questions)
+            }).catch((error) => console.log('er ging iets mis met de api.'))
+            
+            
+            
         } catch (error) {
             
             console.error("Fout bij het ophalen van vragen:", error);
@@ -409,7 +430,7 @@ window.addEventListener('load', () => {
             if (e !== null)
                 e.classList.add('d-none')
         });
-        element.classList.remove('d-none');
+        element?.classList.remove('d-none');
     };
 
     const updateVisibleItem = (element: HTMLElement) => {
