@@ -67,16 +67,7 @@ window.addEventListener('load', () => {
     });
 
 
-    document.getElementById("btn-next")?.addEventListener('click', () => {
-        if (quizApp.numberOfPlayers < 1) {
-            quizApp.showCustomAlert("geef een aantal spelers in groter dan 1!")
-            alert('test!!!')
-        }
-        else{
-            updateVisibleItem(divPlayersContainer);
-        }
-        
-    });
+    
 
   
     // implement logic to set the number of players
@@ -99,19 +90,35 @@ window.addEventListener('load', () => {
 
         const gameModeText = document.getElementById('txtGameMode');
         const inpNumberPlayers = document.getElementById('inpNrPlayers');
+        
 
         
         if (gameModeText) {
             gameModeText.textContent = gameMode;
         }
+       
 
-        if  (gameMode === 'Multiplayer') {
+        if  (gameMode === GameMode.Multi) {
+
+            document.getElementById("btn-next")?.addEventListener('click', () => {
+                console.log(quizApp.numberOfPlayers)
+        
+                if (quizApp.numberOfPlayers < 1) {
+                    quizApp.showCustomAlert("geef een aantal spelers in groter dan 1!")
+                    
+                }
+                else{
+                    updateVisibleItem(divPlayersContainer);
+                }
+                
+            });
             
             if (inpNumberPlayers){
                 inpNumberPlayers.classList.remove('d-none');
                 
                 const numberOfPlayersInput = document.getElementById('inpNrPlayers') as HTMLInputElement;
                 const numberOfPlayers = parseInt(numberOfPlayersInput.value);
+               
                 
                 
             }
@@ -120,6 +127,12 @@ window.addEventListener('load', () => {
                 inpNumberPlayers.classList.add('d-none');
                 
                 quizApp.numberOfPlayers = 1;
+                document.getElementById("btn-next")?.addEventListener('click', () => {
+        
+                        updateVisibleItem(divPlayersContainer);
+                    
+                    
+                });
         }
     }
     });
@@ -157,11 +170,14 @@ window.addEventListener('load', () => {
  
 
     document.getElementById("btnStart")?.addEventListener("click", () => {
-        if(quizApp.numberOfPlayers <=1){
+        const x = document.getElementById('gameMode') as any
+        console.log(x)
+        
+        if(quizApp.numberOfPlayers <2 && x.checked){
             quizApp.showCustomAlert("geef een aantal spelers in groter dan 1!")
             return
         }
-        //quizApp.quizDuration = quizApp.numberOfPlayers
+        quizApp.quizDuration = quizApp.numberOfPlayers
         console.log(quizApp.quizDuration)
         const navigation = document.getElementById("lstNavigation")
         navigation?.classList.remove('d-none')
