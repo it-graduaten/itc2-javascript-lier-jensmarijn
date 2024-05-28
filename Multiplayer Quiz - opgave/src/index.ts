@@ -20,6 +20,7 @@ window.addEventListener('load', () => {
     const divQuestionApiContainer = document.getElementById("question-api-container") as HTMLElement;
     const divCurrentPlayer = document.getElementById("current-player-container") as HTMLElement;
     const questionService = new QuestionService();
+    let selectedCategoryId: number |null = null;
     
 
 
@@ -166,8 +167,36 @@ window.addEventListener('load', () => {
     });
 
     // implement logic to fetch questions from api
+    document.getElementById("start-api")?.addEventListener("click", () => {
+        const aantal = quizApp.quizDuration
+        const difficulty = (document.getElementById("difficultySelect") as HTMLSelectElement).value
+        
+        console.log(difficulty)
+        
+      if (selectedCategoryId != null){
+        try {
+            const questions = questionService.getQuestions(aantal, difficulty,selectedCategoryId)
+            console.log(questions)
+        } catch (error) {
+            
+            console.error("Fout bij het ophalen van vragen:", error);
+        }
+      }
 
- 
+        
+        /*.then(questions => {
+                quizApp.questions = questions;
+                updateVisibleItem(divQuestionsContainer);
+                const noQuestionText = document.getElementById("no-questions") as HTMLElement;
+                let amountOfQuestions = (quizApp.quizDuration * quizApp.numberOfPlayers);
+                noQuestionText.innerText = `No questions have been added yet. Add ${amountOfQuestions} questions to start.`;
+            })
+           .catch(error => {
+                quizApp.showCustomAlert(error);
+            });*/
+    });
+
+    
 
     document.getElementById("btnStart")?.addEventListener("click", () => {
         const x = document.getElementById('gameMode') as any
@@ -439,8 +468,15 @@ window.addEventListener('load', () => {
 
     const showCatagories = () => {
         const categorySelect = document.getElementById("categorySelect") as HTMLSelectElement;
+       
     
 
+        categorySelect.addEventListener('change', (event) => {
+            const selectedOption = event.target as HTMLSelectElement;
+            selectedCategoryId = parseInt(selectedOption.value);
+            
+        });
+    
        questionService.getCategories()
        .then(categories =>{
 
@@ -509,7 +545,7 @@ const getDifficulty = () => {
 
     const getQuestions = async () => {
         try{
-            const questions =  questionService.getQuestions(2, "easy", {id:16, name:"Art"})
+            const questions =  questionService.getQuestions(2, "easy", 16)
             console.log(questions)
         }catch (error){
             console.error(error);
@@ -520,7 +556,7 @@ const getDifficulty = () => {
         hideAllElementsExcept(divWelcome);
         
         getQuestions();
-        console.log(showCatagories());
+        showCatagories();
         showDifficulties();
     };
 

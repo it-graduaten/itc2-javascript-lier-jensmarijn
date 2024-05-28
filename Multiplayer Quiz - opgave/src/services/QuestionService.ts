@@ -11,9 +11,9 @@ class QuestionService {
     }
 
 
-getQuestions = async(aantal:number, difficulty: string, categorie: ICategory) => {
+getQuestions = async(aantal:number, difficulty: string, categorie: number): Promise<IAPIQuestion[]> => {
     try {
-        const response = await fetch(`${this.baseUrl}${aantal}&type=multiple&difficulty=${difficulty}&category=${categorie.id}`);
+        const response = await fetch(`${this.baseUrl}${aantal}&type=multiple&difficulty=${difficulty}&category=${categorie}`);
 
         if (!response.ok){
             throw new Error("Api kan niet worden opgehaald");
@@ -24,6 +24,7 @@ getQuestions = async(aantal:number, difficulty: string, categorie: ICategory) =>
         return questions;
     } catch (error) {
         console.error(error);
+        return [];
 }
 }
 
@@ -36,10 +37,9 @@ getCategories = async(): Promise<ICategory[]> => {
         }
 
         const data = await response.json();
-
         const categories: ICategory[] = data.trivia_categories.map((c: ICategory) => ({
             id: c.id,
-            name: c.name
+            name: c.name,
         }))
         return categories;
     } catch (error) {
