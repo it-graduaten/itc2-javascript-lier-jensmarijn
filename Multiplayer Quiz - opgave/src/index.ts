@@ -99,6 +99,7 @@ window.addEventListener('load', () => {
 
         const gameModeText = document.getElementById('txtGameMode');
         const inpNumberPlayers = document.getElementById('inpNrPlayers');
+        const apiCont = document.getElementById('api-container') as HTMLElement;
 
         
         if (gameModeText) {
@@ -106,17 +107,20 @@ window.addEventListener('load', () => {
         }
 
         if  (gameMode === 'Multiplayer') {
+            apiCont.classList.remove('d-none');
             if (inpNumberPlayers){
                 inpNumberPlayers.classList.remove('d-none');
+                
                 const numberOfPlayersInput = document.getElementById('inpNrPlayers') as HTMLInputElement;
                 const numberOfPlayers = parseInt(numberOfPlayersInput.value);
                 
                 
             }
         }else {
-        
+            apiCont.classList.add('d-none');
             if (inpNumberPlayers) {
                 inpNumberPlayers.classList.add('d-none');
+                
                 quizApp.numberOfPlayers = 1;
         }
     }
@@ -418,18 +422,22 @@ window.addEventListener('load', () => {
     const showCatagories = () => {
         const categorySelect = document.getElementById("categorySelect") as HTMLSelectElement;
     
+
        questionService.getCategories()
        .then(categories =>{
+
         categories.forEach((category: ICategory) =>{
             const option = document.createElement("option")
             option.value = category.id.toString()
             option.innerText = category.name
             categorySelect.appendChild(option)
         })
+
             }).catch(error => {
                 console.log(error)
             })
     };
+
 
     const showCurrentPlayerBlock = () => {
         const currentPlayer = document.getElementById("current-player-container") as HTMLElement;

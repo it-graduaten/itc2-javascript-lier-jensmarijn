@@ -36,6 +36,7 @@ getCategories = async(): Promise<ICategory[]> => {
         }
 
         const data = await response.json();
+
         const categories: ICategory[] = data.trivia_categories.map((c: ICategory) => ({
             id: c.id,
             name: c.name
