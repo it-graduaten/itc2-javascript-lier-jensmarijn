@@ -239,7 +239,7 @@ window.addEventListener('load', () => {
             updateVisibleItem(divQuestionsContainer);
             const noQuestionText = document.getElementById("no-questions") as HTMLElement;
             let amountOfQuestions = (quizApp.quizDuration * quizApp.numberOfPlayers);
-            noQuestionText.innerText = `No questions have been added yet. Add ${amountOfQuestions} questions to start.`;
+            noQuestionText.innerText = `No questions have been added yet. Add ${quizApp.quizDuration} questions to start.`;
         }
         
         
