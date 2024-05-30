@@ -18,8 +18,8 @@ window.addEventListener('load', () => {
     const divPlayersContainer = document.getElementById("players-container") as HTMLElement;
     const divQuizContainer = document.getElementById("quiz-container") as HTMLElement;
     const divScoreboardContainer = document.getElementById("scoreboard-container") as HTMLElement;
-    const divQuestionApiContainer = document.getElementById("question-api-container") as HTMLElement;
     const divCurrentPlayer = document.getElementById("current-player-container") as HTMLElement;
+    const divQuestionApiContainer = document.getElementById("api-container") as HTMLElement
     const questionService = new QuestionService();
     let selectedCategoryId: number |null = null;
     
@@ -145,7 +145,6 @@ window.addEventListener('load', () => {
         const target = e.target as HTMLInputElement;
         const number = parseInt(target.value);
         quizApp.quizDuration = number * quizApp.numberOfPlayers;
-        console.log(quizApp.quizDuration)
         const btn = document.getElementById("btnStart") as HTMLButtonElement;
         btn.disabled = number <= 0;
     });
@@ -153,31 +152,32 @@ window.addEventListener('load', () => {
     // implement logic to set the question mode
     document.getElementById('questionMode')?.addEventListener("change", (e) => {
         const questionText = document.getElementById("txtQuestionMode") as HTMLElement;
-        const apiCont = document.getElementById('api-container') as HTMLElement;
 
         const target = e.target as HTMLInputElement;
        if (!target.checked) {
        quizApp.questionMode =(QuestionMode.Custom)
        questionText.innerText = QuestionMode.Custom;
-       apiCont.classList.add('d-none')
+       
        }else{
         quizApp.questionMode =(QuestionMode.Api)
         questionText.innerText = QuestionMode.Api;
-        apiCont.classList.remove('d-none')
+        
        }
     });
 
     // implement logic to fetch questions from api
     document.getElementById("start-api")?.addEventListener("click", () => {
         
-        const aantal = quizApp.quizDuration
+        const aantal = quizApp.numberOfPlayers * quizApp.questions.length
         const difficulty = (document.getElementById("difficultySelect") as HTMLSelectElement).value
-        
+        console.log('test')
+        console.log(aantal)
+        console.log(difficulty)
         
         
       if (selectedCategoryId != null){
         try {
-            questionService.getQuestions(aantal, difficulty,selectedCategoryId).then((q : IAPIQuestion[]) =>{
+            questionService.getQuestions(quizApp.quizDuration, difficulty,selectedCategoryId).then((q : IAPIQuestion[]) =>{
                 q.forEach(e => {
                      const apiQuestion = new Question(e.question)
                      const answers = e.incorrect_answers.map((ia) => apiQuestion.addAnswer(
@@ -191,9 +191,12 @@ window.addEventListener('load', () => {
                         text:e.correct_answer,
                      })
                      quizApp.addQuestion(apiQuestion)
+                     updateQuestionList()
+                     
                         
             });
             console.log(quizApp.questions)
+            updateVisibleItem(divPlayersContainer)
             }).catch((error) => console.log('er ging iets mis met de api.'))
             
             
@@ -221,16 +224,17 @@ window.addEventListener('load', () => {
 
     document.getElementById("btnStart")?.addEventListener("click", () => {
         const x = document.getElementById('gameMode') as any
-        console.log(x)
+        
         
         if(quizApp.numberOfPlayers <2 && x.checked){
             quizApp.showCustomAlert("geef een aantal spelers in groter dan 1!")
             return
         }
-        quizApp.quizDuration = quizApp.numberOfPlayers
+        
         console.log(quizApp.quizDuration)
         const navigation = document.getElementById("lstNavigation")
         navigation?.classList.remove('d-none')
+        console.log(quizApp.questionMode)
         if (quizApp.questionMode === QuestionMode.Custom) {
             updateVisibleItem(divQuestionsContainer);
             const noQuestionText = document.getElementById("no-questions") as HTMLElement;
@@ -484,7 +488,9 @@ window.addEventListener('load', () => {
             option.innerText = difficulty
             difficultySelect.appendChild(option)
         })
-    };
+        difficultySelect.addEventListener('change', (event) => {
+            const selectedDifficulty = event.target as HTMLSelectElement;
+})};
 
 
     const showCatagories = () => {
@@ -566,7 +572,11 @@ const getDifficulty = () => {
 
     const getQuestions = async () => {
         try{
-            const questions =  questionService.getQuestions(2, "easy", 16)
+            console.log(quizApp.quizDuration)
+            const aantalVragen = quizApp.quizDuration
+            const difficulty = 'easy'
+            const category = selectedCategoryId
+            const questions =  questionService.getQuestions(aantalVragen, difficulty, 2)
             console.log(questions)
         }catch (error){
             console.error(error);
